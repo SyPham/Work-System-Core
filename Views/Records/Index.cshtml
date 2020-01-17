@@ -1,0 +1,400 @@
+﻿@{
+    ViewData["Title"] = "Records ";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="title">
+            <section id="records">
+            </section>
+        </div>
+    </div>
+    @*scrollbar at the bottom boc boi 1 div co id="" va goi trong ham event*@
+    <div id="wrapper">
+        <div class="col-md-12">
+            <div class="tile">
+                <h3 class="tile-title">@*Document List*@  Work List </h3>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-sm btn-primary mr-1 " data-toggle="modal" data-target="#myModal">
+                        Add New
+                    </button><br />
+                    @*<button type="button" class="btn btn-sm btn-primary mr-1"  id="editButton" data-toggle="modal" >
+                         Resource.Record_Edit
+                    </button><br />*@
+                    @*<button type="button" class="btn btn-sm btn-primary mr-1" id="deleteButton"  >
+                         Resource.Record_Delete
+                    </button><br />*@
+                    @*<a class="btn btn-sm btn-primary mr-1" href="/Status/Index" style="@(user.RoleID == 1 ? "visibility: visible;" : "visibility: hidden")" id="editStatus">
+
+                            @Resource.Record_EditStatus
+                        </a>*@
+                </div>
+                <div id="sampleTable_filter" class="dataTables_filter">
+                    @*autocomplete="off" ẩn giá trị đã search rồi*@
+                    <label>
+                        @*Search*@ Search:<input type="search" class="form-control form-control-sm " autocomplete="off" id="search" placeholder="" aria-controls="sampleTable">
+
+                    </label>
+
+                </div>
+                <p class="bs-component">
+
+                    <button class="btn btn-info btn-sm statusButtonAll" type="button">All</button>
+                    <button class="btn btn-success btn-sm statusButton" data-id="1" type="button">Done</button>
+                    <button class="btn btn-danger btn-sm statusButton" data-id="2" type="button">Not Yet Done</button>
+                    <button class="btn btn-warning btn-sm statusButton" data-id="4" type="button">Tracking</button>
+
+                </p>
+
+                <input class="d-none listInput" type="text" id="list-id" />
+
+                <div class="table-responsive">
+                    <table class="table" id="recordTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Number
+                                </th>
+                                <th>
+                                    Job ID
+                                </th>
+                                <th>
+                                    @*DocumentCategory*@
+                                    Job Name
+                                </th>
+                                <th>
+                                    Type Job
+                                </th>
+                                <th>
+                                    Description
+                                </th>
+                                <th>
+                                    Comment
+                                </th>
+                                <th>
+                                    <div class="btn-group">
+                                        <div>
+                                            @*Status*@
+                                            Status
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-sort-alpha-asc sortStatus" aria-hidden="true"></i>
+                                            <i class="fa fa-sort-alpha-desc sortdescStatus d-none" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="btn-group">
+                                        <div>
+                                            @*Department*@
+                                            Department
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-sort-alpha-asc sortDepartment" aria-hidden="true"></i>
+                                            <i class="fa fa-sort-alpha-desc sortdescDepartment d-none" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th>
+                                    Team
+                                </th>
+                                <th>
+                                    Deadline
+                                </th>
+                                <th>
+                                    Created By
+                                </th>
+                                <th>
+                                    <div class="btn-group">
+                                        <div>
+                                            Created Date
+                                        </div>
+                                        <div>
+                                            <i class="fa fa-sort-alpha-asc sortCreatedDate" style="cursor:pointer" aria-hidden="true"></i>
+                                            <i class="fa fa-sort-alpha-desc sortdescCreatedDate d-none" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+
+                                </th>
+                                <th>
+                                    Options
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody" id="tblRecords">
+                        </tbody>
+                    </table>
+                    <script type="text/ng-template" id="admin-template">
+                        <tr class="" data-id="">
+                            <td>
+                                <div class="pretty p-default p-smooth p-bigger">
+                                    <input class="recordCheckbox" data-edit="" name="recordCheckbox" type="checkbox" />
+                                    <div class="state p-success-o">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class=""> </span>
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                <select class="categoriesSelect strip"><option value="">.: Please choose document category:.</option></select>
+                            </td>
+                            <td>
+                                <select class="subcategoriesSelect strip"><option value="">.: Please choose approval sheet category:.</option></select>
+                            </td>
+                            <td>
+
+                                <input value="" class="titleInput strip" type="text">
+                            </td>
+                            <td>
+                                <input value="" data-toggle="tooltip" title="" class="descriptionInput strip" type="text">
+
+                            </td>
+                            <td>
+                                <select class="statusSelect strip"> <option value="">.: Please choose status:.</option></select>
+                            </td>
+                            <td>
+                                <select class="locationSelect strip"><option value="">.: Please choose location:.</option></select>
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                               
+                            </td>
+                            <td>
+                               
+                            </td>
+                            <td>
+                               
+                            </td>
+                            <td>
+                                <button data-id="" class="btn btn-danger btn-sm deleteButton">Delete</button>
+                            </td>
+                        </tr>
+                    </script>
+                    <script type="text/template" id="user-template">
+                        <tr class="" data-id="">
+                            <td>
+                                <div class="pretty p-default p-smooth p-bigger">
+                                    <input class="recordCheckbox" data-edit="" name="recordCheckbox" type="checkbox" />
+                                    <div class="state p-success-o">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class=""> </span>
+                            </td>
+                            <td>
+                               
+                            </td>
+                            <td>
+                                <select class="categoriesSelect strip"><option value="">.: Please choose document category:.</option></select>
+                            </td>
+                            <td>
+                                <select class="subcategoriesSelect strip"><option value="">.: Please choose approval sheet category:.</option></select>
+                            </td>
+                            <td>
+                                <input value="" class="titleInput strip" type="text">
+                            </td>
+                            <td>
+                                <input value="" data-toggle="tooltip" title="" class="descriptionInput strip" type="text">
+                            </td>
+                            <td>
+                                <select disabled class="statusSelect strip"> <option value="">.: Please choose status:.</option></select>
+                            </td>
+                            <td>
+                                <select disabled class="locationSelect strip"><option value="">.: Please choose location:.</option></select>
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                               
+                            </td>
+                            <td>
+                               
+                            </td>
+                            <td>
+                                <button data-id="" class="btn btn-danger btn-sm deleteButton">Delete</button>
+                            </td>
+                        </tr>
+                    </script>
+                    <hr />
+                    <ul id="pagination" class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="#">«</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">»</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="exampleModalLiveLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="CategoryID">Type Job</label>
+                            <select class="form-control CategoryID" id="CategoryID">
+                                @*MentionAll:ID & class *@
+                                <option>Choose Type Job </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="SubCategoryID">Job</label>
+                            <select class="form-control SubCategoryID" id="SubCategoryID">
+                                <option>Choose Job</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="Title">Title</label>
+                            <input type="text" class="form-control Title" id="Title" placeholder=" " />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="Description">Description</label>
+                            <input type="text" class="form-control Description" id="Description" placeholder=" " />
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="StatusID"> Status</label>
+                            <select class="form-control StatusID" id="StatusID">
+                                <option>Choose Status</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="LocationID">Location </label>
+                            <select class="form-control LocationID" id="LocationID">
+                                <option>Choose Location</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                        <div class="form-group">
+                            <label for="colorCode">Color Code</label>
+
+                            <select class="form-control colorCode">
+                                <option>Choose Color Code</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveButton">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myuserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="exampleModalLiveLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="CategoryID">Document Category</label>
+                            <select class="form-control CategoryID" id="CategoryID">
+                                <option>Choose Document Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="SubCategoryID">Approval Sheet</label>
+                            <select class="form-control SubCategoryID" id="SubCategoryID">
+                                <option>Choose Approval Sheet</option>
+                            </select>
+                        </div>
+                        <div class="form-group w-100">
+                            <label for="Title">Title</label>
+                            <input type="text" class="form-control Title" id="Title" placeholder=" " />
+                        </div>
+                        <div class="form-group">
+                            <label for="Description">Description</label>
+                            <input type="text" class="form-control Description" id="Description" placeholder=" " />
+                        </div>
+                        <div class="form-group">
+                            <label for="colorCode">Color Code</label>
+
+                            <select class="form-control colorCode">
+                                <option>Choose Color Code</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary saverecorduserButton" id="saverecorduserButton">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalAdmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title" id="myModalLabel">Edit</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="StatusID"> Status</label>
+                    <select class="form-control StatusID" id="StatusID">
+                        <option>Choose Status</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
